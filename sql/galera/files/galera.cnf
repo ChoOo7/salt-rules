@@ -1,0 +1,20 @@
+[mysqld]
+#mysql settings
+binlog_format=ROW
+default-storage-engine=innodb
+innodb_autoinc_lock_mode=2
+query_cache_size=0
+query_cache_type=0
+bind-address=0.0.0.0
+
+#galera settings
+wsrep_provider=/usr/lib/galera/libgalera_smm.so
+wsrep_cluster_name="{{ grains['base_hostname'] }}_maria_cluster"
+wsrep_cluster_address="gcomm://{{ grains['base_hostname'] }}-node1,{{ grains['base_hostname'] }}-node2,{{ grains['base_hostname'] }}-node3"
+
+#wsrep_sst_method=rsync
+wsrep_sst_method=xtrabackup
+wsrep_sst_auth=root:{{ pillar['mysql_config']['admin_password'] }}
+
+#You can force rsync bind adress
+#wsrep_sst_receive_address=192.167.112.11
