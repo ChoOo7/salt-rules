@@ -1,0 +1,3 @@
+# Auto managed by salt, do not edit
+
+{{ grains['base_hostname'] }}

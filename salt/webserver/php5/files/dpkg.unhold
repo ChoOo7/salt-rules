@@ -1,0 +1,65 @@
+
+
+echo "php5 install" | dpkg --set-selections
+echo "php5-cli install" | dpkg --set-selections
+echo "php5-common install" | dpkg --set-selections
+echo "php5-curl install" | dpkg --set-selections
+echo "php5-gd install" | dpkg --set-selections
+echo "php5-imagick install" | dpkg --set-selections
+echo "php5-intl install" | dpkg --set-selections
+echo "php5-json install" | dpkg --set-selections
+echo "php5-mcrypt install" | dpkg --set-selections
+echo "php5-memcache install" | dpkg --set-selections
+echo "php5-mysql install" | dpkg --set-selections
+echo "php5-readline install" | dpkg --set-selections
+echo "php5-xsl install" | dpkg --set-selections
+
+
+
+echo "php{{ pillar['php_apt_version'] }} install" | dpkg --set-selections
+echo "php{{ pillar['php_apt_version'] }}-cli install" | dpkg --set-selections
+echo "php{{ pillar['php_apt_version'] }}-common install" | dpkg --set-selections
+echo "php{{ pillar['php_apt_version'] }}-curl install" | dpkg --set-selections
+echo "php{{ pillar['php_apt_version'] }}-gd install" | dpkg --set-selections
+echo "php{{ pillar['php_apt_version'] }}-imagick install" | dpkg --set-selections
+echo "php{{ pillar['php_apt_version'] }}-intl install" | dpkg --set-selections
+echo "php{{ pillar['php_apt_version'] }}-json install" | dpkg --set-selections
+echo "php{{ pillar['php_apt_version'] }}-mcrypt install" | dpkg --set-selections
+echo "php{{ pillar['php_apt_version'] }}-memcache install" | dpkg --set-selections
+echo "php{{ pillar['php_apt_version'] }}-mysql install" | dpkg --set-selections
+echo "php{{ pillar['php_apt_version'] }}-readline install" | dpkg --set-selections
+echo "php{{ pillar['php_apt_version'] }}-xsl install" | dpkg --set-selections
+
+
+
+
+echo "libapache2-mod-php5 install" | dpkg --set-selections
+echo "php-auth-sasl install" | dpkg --set-selections
+echo "php-elisp install" | dpkg --set-selections
+echo "php-http install" | dpkg --set-selections
+echo "php-http-request install" | dpkg --set-selections
+echo "php-mail install" | dpkg --set-selections
+echo "php-mail-mime install" | dpkg --set-selections
+echo "php-mail-mimedecode install" | dpkg --set-selections
+echo "php-net-smtp install" | dpkg --set-selections
+echo "php-net-socket install" | dpkg --set-selections
+echo "php-net-url install" | dpkg --set-selections
+echo "php-pear install" | dpkg --set-selections
+echo "php5-dev install" | dpkg --set-selections
+echo "php5-redis install" | dpkg --set-selections
+
+echo "php{{ pillar['php_version'] }}-dev install" | dpkg --set-selections
+echo "php{{ pillar['php_version'] }}-redis install" | dpkg --set-selections
+
+
+echo "pkg-php-tools install" | dpkg --set-selections
+
+echo "apache2 install" | dpkg --set-selections
+echo "apache2-bin install" | dpkg --set-selections
+echo "apache2-data install" | dpkg --set-selections
+echo "apache2-mpm-prefork install" | dpkg --set-selections
+echo "apache2-utils install" | dpkg --set-selections
+echo "apache2.2-common install" | dpkg --set-selections
+echo "libapache-pom-java install" | dpkg --set-selections
+echo "libapache2-mod-fcgid install" | dpkg --set-selections
+echo "libapache2-mod-statsd install" | dpkg --set-selections

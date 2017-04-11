@@ -1,0 +1,8 @@
+
+
+
+### AUTO MANAGED BY SALT. DO NOT EDIT ###
+
+
+[mysqld]
+max_connect_errors = 990000000

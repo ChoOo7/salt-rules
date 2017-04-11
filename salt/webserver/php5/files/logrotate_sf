@@ -1,0 +1,13 @@
+
+/srv/www/*/html/log/*.log
+{
+        daily
+        dateext
+        missingok
+        rotate 5
+        compress
+        delaycompress
+        notifempty
+        create 666 www-data www-data
+}
+
