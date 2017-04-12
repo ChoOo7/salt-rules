@@ -8,9 +8,15 @@ Partitionement
 
 TK / SM
   S'enregistrer sur le salt-master
+  
+  Mettre en place le partionement / les disques
+  
 sudo apt-get install -Y salt-minion
 salt-key -L
 salt-key -a TheHostname
+
+
+
 
 modifier
 /srv/pillar/top.sls
@@ -20,7 +26,7 @@ salt '*' 'saltutil.sync_grains'
 
 SM
 Install soft divers : htop, nano,....
-TARGET="salt1"
+TARGET="arengibox-front*"
 salt '*' saltutil.sync_grains
 salt '*' saltutil.refresh_pillar
 
@@ -30,16 +36,22 @@ salt $TARGET state.sls all.ulimits
 salt $TARGET cmd.run reboot
 salt $TARGET test.ping
 salt $TARGET state.sls webserver
+salt $TARGET state.sls fail2ban
 
+Installer les noeuds un par un en commençant par le master
+TARGET="arengibox-front1"
 salt $TARGET state.sls sql.galera
-Installer galera sur les X noeuds (il demarera pas)
-Demarer un nouveau cluster sur node1 avec
-salt $TARGET cmd.run '/usr/bin/mysqld_safe --wsrep-new-cluster --wsrep-cluster-address="gcomm://"'
-Changer le mode de passe debian-sys-maint
 
-Démarer les cluster sur les nodes2 et node3
-Tuer la commande et mysql sur node1
-démarer mysql normalement sur node1
+
+OBSOLETE : 
+                  Installer galera sur les X noeuds (il demarera pas)
+                  Demarer un nouveau cluster sur node1 avec
+                  salt $TARGET cmd.run '/usr/bin/mysqld_safe --wsrep-new-cluster --wsrep-cluster-address="gcomm://"'
+                  Changer le mode de passe debian-sys-maint
+
+                  Démarer les cluster sur les nodes2 et node3
+                  Tuer la commande et mysql sur node1
+                  démarer mysql normalement sur node1
 
 
 
@@ -47,6 +59,7 @@ démarer mysql normalement sur node1
 salt $TARGET state.sls sql.conf
 salt $TARGET state.sls sql.automysqlbackup
 salt $TARGET state.sls sql.utils
+salt $TARGET state.sls sql.haproxy
   
 Install soft metier
   apache
@@ -61,4 +74,11 @@ TK
 Install soft 
   monitoring
   firewall
+
+
+
+TODO : 
+fail2ban : quel port pour SSH ? -> 22
+partage de session avec memcached
+Changer le nom des machines pour back
 

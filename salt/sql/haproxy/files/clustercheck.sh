@@ -22,7 +22,7 @@
 # Based on the original script from Unai Rodriguez and Olaf (https://github.com/olafz/percona-clustercheck)
 #
 # Grant privileges required:
-# GRANT PROCESS ON *.* TO 'clustercheckuser'@'localhost' IDENTIFIED BY 'clustercheckpassword{{ admin_password }}';
+# GRANT PROCESS ON *.* TO 'clustercheckuser'@'localhost' IDENTIFIED BY 'clustercheckpassword{{ pillar['mysql_config']['haproxy_password'] }}';
 
 if [[ $1 == '-h' || $1 == '--help' ]];then
   echo "Usage: $0 <user> <pass> <available_when_donor=0|1> <log_file>"
@@ -30,7 +30,7 @@ if [[ $1 == '-h' || $1 == '--help' ]];then
 fi
 
 MYSQL_USERNAME="clustercheckuser"
-MYSQL_PASSWORD="clustercheckpasswordWillBeChangedInProd"
+MYSQL_PASSWORD="clustercheckpassword{{ pillar['mysql_config']['haproxy_password'] }}"
 AVAILABLE_WHEN_DONOR=${3:-1}
 ERR_FILE="${4:-/dev/null}"
 

@@ -8,7 +8,12 @@ include:
   - webserver.defaultvhost
   #- webserver.igbinary
   - webserver.modules
-  #- webserver.php
+
+{%- if pillar['php_version'] == '5' %}
+  - webserver.php5
+{% else %}
+  - webserver.php
+{% endif %}
   #- webserver.pure-ftpd
   - webserver.unattended-upgrades
   - webserver.www-admin

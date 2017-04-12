@@ -113,6 +113,13 @@ mysql_stop:
       - pkg: mariadb-pkgs
     - unless: ls /etc/mysql/conf.d/galera.cnf
 
+
+/etc/init.d/mysql:
+  file.managed:
+    - source: salt://sql/galera/files/mysql_start
+    - group: root
+    - mode: 755
+    
 copy:
   cmd.run:
     - names: 
@@ -140,25 +147,25 @@ copy:
     - require:
       - pkg: mariadb-pkgs
 
-{% set nodename = grains['nodename'] %}
-{% set node_master = grains['node_master'] %}
-{% if nodename == node_master %}
+{% if grains['is_node_master'] %}
 start_wsrep:
   cmd.run:
-    - name: /etc/init.d/mysql start --wsrep-new-cluster --wsrep-cluster-address="gcomm://"
+    #- name: /etc/init.d/mysql start --wsrep-new-cluster --wsrep-cluster-address="gcomm://"
+    - name: /etc/init.d/mysql startcluster
     - require: 
       - pkg: mariadb-pkgs
-    - unless: ls /var/run/mysqld/mysqld.sock
+    - unless: ls /var/run/mysqld/mysqld.sock && ps aux | grep mysql | grep -v grep
 
 
 grantxinetcheckuser:
   cmd.run:
-    - name: echo "GRANT PROCESS ON *.* TO 'clustercheckuser'@'localhost' IDENTIFIED BY 'clustercheckpassword{{ admin_password }}'" | mysql --defaults-file=/etc/mysql/debian.cnf --default-character-set=utf8
+    - name: echo "GRANT PROCESS ON *.* TO 'clustercheckuser'@'localhost' IDENTIFIED BY 'clustercheckpassword{{ pillar['mysql_config']['haproxy_password'] }}'" | mysql -u root -p{{ admin_password }}  --default-character-set=utf8
   mysql_user.present:
     - name: clustercheckuser
     - host: localhost
-    - password: clustercheckpassword!clustercheckpassword{{ admin_password }}
-    - connection_default_file: '/etc/mysql/debian.cnf'
+    - password: clustercheckpassword!clustercheckpassword{{ pillar['mysql_config']['haproxy_password'] }}
+    - connection_user: root
+    - connection_pass: {{ admin_password }} 
     - onlyif: 'ls /etc/mysql/debian.cnf'
     - require:
       - cmd: start_wsrep

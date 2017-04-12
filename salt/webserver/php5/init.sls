@@ -1,14 +1,14 @@
 php5_ppa_cmd:
   cmd.run:
-    - name: "apt-add-repository -y ppa:ondrej/php5"
+    - name: "apt-add-repository -y ppa:ondrej/php"
     - env:
       - LC_ALL: 'en_US.UTF-8'
 
-php5_ppa:
-  pkgrepo.managed:
-    - ppa: ondrej/php5
-    - require:
-      - cmd: php5_ppa_cmd
+#php5_ppa:
+#  pkgrepo.managed:
+#    - ppa: ondrej/php5
+#    - require:
+#      - cmd: php5_ppa_cmd
       
 /var/log/php/:
   file.directory:
@@ -36,7 +36,6 @@ installPhpPackages:
       - php5.6-json
       - libapache2-mod-php5.6
 
-      - php5.6-pear
       - php5.6-redis
       
 
