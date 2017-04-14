@@ -14,3 +14,7 @@ base:
     - php56
     - galera-arengibox
     - hostname-back
+  'arengi-back*':                                                                                                                                                                    
+    - php56
+    - galera-arengibox
+    - hostname-back

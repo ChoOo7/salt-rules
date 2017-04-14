@@ -18,14 +18,19 @@ return array (
   array (
     'Default' =>
     array (
-     'php_session mas' =>
+     'host 1' =>
       array (
         'hostname' => '{{ grains['base_hostname']  }}-{{ pillar['hostname-shortname'] }}1',
         'port' => '11211',
       ),
-      'php_session slv' =>
+      'host 2' =>
       array (
         'hostname' => '{{ grains['base_hostname']  }}-{{ pillar['hostname-shortname'] }}2',
+        'port' => '11211',
+      ),
+      'host 3' =>
+      array (
+        'hostname' => '{{ grains['base_hostname']  }}-{{ pillar['hostname-shortname'] }}3',
         'port' => '11211',
       ),
     ),

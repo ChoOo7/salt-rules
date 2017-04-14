@@ -26,9 +26,11 @@ salt '*' 'saltutil.sync_grains'
 
 SM
 Install soft divers : htop, nano,....
-TARGET="arengibox-front*"
+TARGET="arengi-back*"
 salt '*' saltutil.sync_grains
 salt '*' saltutil.refresh_pillar
+
+salt $TARGET state.sls custom.arengi.hosts
 
 salt $TARGET state.sls all.initialdeps
 salt $TARGET state.sls all.generalstuff
@@ -36,11 +38,16 @@ salt $TARGET state.sls all.ulimits
 salt $TARGET cmd.run reboot
 salt $TARGET test.ping
 salt $TARGET state.sls webserver
+salt $TARGET state.sls webserver
 salt $TARGET state.sls webserver.memcached
+salt $TARGET state.sls webserver.memcached
+#
+oui une seconde fois ! :)
+
 salt $TARGET state.sls fail2ban
 
 Installer les noeuds un par un en commençant par le master
-TARGET="arengibox-front1"
+TARGET="arengi-back1"
 salt $TARGET state.sls sql.galera
 
 

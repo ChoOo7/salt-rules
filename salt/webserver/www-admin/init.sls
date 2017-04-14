@@ -18,6 +18,10 @@
     - makedirs: True
     - source: salt://webserver/www-admin/files/users.php
 
+/srv/www-admin/logs/:
+  file.directory:
+    - makedirs: True
+
 /srv/www-admin/html/phpinfo.php:
   file:
     - managed

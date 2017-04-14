@@ -13,7 +13,6 @@ def aggregated_hostname():
      compacted_hostname = socket.gethostname();
      
      compacted_hostname = compacted_hostname.replace('-front1', '');
-     compacted_hostname = compacted_hostname.replace('-salt1', '');
      compacted_hostname = compacted_hostname.replace('-front2', '');
      compacted_hostname = compacted_hostname.replace('-front3', '');
      compacted_hostname = compacted_hostname.replace('-front4', '');
@@ -28,7 +27,16 @@ def aggregated_hostname():
      compacted_hostname = compacted_hostname.replace('-worker3', '');
      compacted_hostname = compacted_hostname.replace('-data1', '');
      compacted_hostname = compacted_hostname.replace('-data2', '');
-     compacted_hostname = compacted_hostname.replace('-data3', '');
+     compacted_hostname = compacted_hostname.replace('-data3', '');     
+     compacted_hostname = compacted_hostname.replace('-back1', '');
+     compacted_hostname = compacted_hostname.replace('-back2', '');
+     compacted_hostname = compacted_hostname.replace('-back3', '');
+     compacted_hostname = compacted_hostname.replace('-salt1', '');
+     compacted_hostname = compacted_hostname.replace('-salt2', '');
+     compacted_hostname = compacted_hostname.replace('-admin1', '');
+     compacted_hostname = compacted_hostname.replace('-admin2', '');
+     compacted_hostname = compacted_hostname.replace('-admin', '');
+     
      compacted_hostname = compacted_hostname.replace('1', '');
      compacted_hostname = compacted_hostname.replace('2', '');
      compacted_hostname = compacted_hostname.replace('3', '');
@@ -45,6 +53,10 @@ def aggregated_hostname():
        hosttype='worker';
      if('-data' in initialHostname):
        hosttype='data';
+     if('-back' in initialHostname):
+       hosttype='back';
+     if('-admin' in initialHostname):
+       hosttype='admin';
 
 
      compacted_hostname_before_replace = compacted_hostname;

@@ -11,6 +11,12 @@ apache2modules:
     - require:
       - pkg: apache2modules
 
+
+
+cronolog:
+  pkg.installed:
+    - name: cronolog
+
 #Enable apache modules
 
 EnableExpireModule:
