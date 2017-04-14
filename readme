@@ -36,6 +36,7 @@ salt $TARGET state.sls all.ulimits
 salt $TARGET cmd.run reboot
 salt $TARGET test.ping
 salt $TARGET state.sls webserver
+salt $TARGET state.sls webserver.memcached
 salt $TARGET state.sls fail2ban
 
 Installer les noeuds un par un en commençant par le master
@@ -81,4 +82,4 @@ TODO :
 fail2ban : quel port pour SSH ? -> 22
 partage de session avec memcached
 Changer le nom des machines pour back
-
+haproxy : modifier la config à la main

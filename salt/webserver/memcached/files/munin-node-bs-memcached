@@ -1,0 +1,2 @@
+[memcached_*]
+env.host {{ grains['ipv4'][0] }} 

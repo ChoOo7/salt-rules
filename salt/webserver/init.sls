@@ -9,7 +9,7 @@ include:
   #- webserver.igbinary
   - webserver.modules
 
-{%- if pillar['php_version'] == '5' %}
+{%- if pillar['php_version'] == 5 %}
   - webserver.php5
 {% else %}
   - webserver.php
