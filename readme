@@ -36,6 +36,10 @@ salt $TARGET state.sls all.initialdeps
 salt $TARGET state.sls all.generalstuff
 salt $TARGET state.sls all.generalstuff
 salt $TARGET state.sls all.ulimits
+salt $TARGET cmd.run 'apt-get dist-upgrade -y'
+salt $TARGET cmd.run reboot
+salt $TARGET test.ping
+salt $TARGET cmd.run 'apt-get dist-upgrade -y'
 salt $TARGET cmd.run reboot
 salt $TARGET test.ping
 salt $TARGET state.sls webserver
