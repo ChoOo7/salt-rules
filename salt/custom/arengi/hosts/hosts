@@ -1,0 +1,11 @@
+127.0.0.1	localhost
+
+10.0.0.1 arengi-admin1
+10.0.0.2 arengi-back1
+10.0.0.3 arengi-back2
+10.0.0.4 arengi-back3
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
