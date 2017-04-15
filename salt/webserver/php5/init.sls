@@ -69,6 +69,20 @@ installPhpPackagesOther:
 {% endfor %}
 
 
+{% for configName in ['gd.ini', 'json.ini', 'memcache.ini', 'mysql.ini', 'pdo_mysql.ini', 'xsl.ini', 'exif.ini', 'mysqlnd.ini', 'readline.ini', 'xml.ini', 'curl.ini', 'iconv.ini', 'opcache.ini', 'ftp.ini', 'igbinary.ini', 'mysqli.ini'] %}
+
+# SIMLINK
+{{ pillar['php_config_dir'] }}apache2/conf.d/{{ configName }}:
+  file.symlink:
+    - target: ../../mods-available/{{ configName }}
+
+#Cli
+{{ pillar['php_config_dir'] }}cli/conf.d/{{ configName }}:
+  file.symlink:
+    - target: ../../mods-available/{{ configName }}
+{% endfor %}
+
+
 
 {% for configName in ['20-mcrypt.ini', '20-redis.ini'] %}
 
