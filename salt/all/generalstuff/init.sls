@@ -8,6 +8,7 @@ generalStuff:
       - emacs
       - unzip
       - zip
+      - htop
       - subversion
       - git-core
       - ntpdate

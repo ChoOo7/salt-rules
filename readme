@@ -34,6 +34,7 @@ salt $TARGET state.sls custom.arengi.hosts
 
 salt $TARGET state.sls all.initialdeps
 salt $TARGET state.sls all.generalstuff
+salt $TARGET state.sls all.generalstuff
 salt $TARGET state.sls all.ulimits
 salt $TARGET cmd.run reboot
 salt $TARGET test.ping
@@ -49,34 +50,28 @@ salt $TARGET state.sls fail2ban
 Installer les noeuds un par un en commençant par le master
 TARGET="arengi-back1"
 salt $TARGET state.sls sql.galera
+salt $TARGET state.sls sql.galera
 
+TARGET="arengi-back2"
+salt $TARGET state.sls sql.galera
+salt $TARGET state.sls sql.galera
 
-OBSOLETE : 
-                  Installer galera sur les X noeuds (il demarera pas)
-                  Demarer un nouveau cluster sur node1 avec
-                  salt $TARGET cmd.run '/usr/bin/mysqld_safe --wsrep-new-cluster --wsrep-cluster-address="gcomm://"'
-                  Changer le mode de passe debian-sys-maint
+TARGET="arengi-back3"
+salt $TARGET state.sls sql.galera
+salt $TARGET state.sls sql.galera
 
-                  Démarer les cluster sur les nodes2 et node3
-                  Tuer la commande et mysql sur node1
-                  démarer mysql normalement sur node1
-
-
+TARGET="arengi-back*"
 
 
 salt $TARGET state.sls sql.conf
 salt $TARGET state.sls sql.automysqlbackup
 salt $TARGET state.sls sql.utils
 salt $TARGET state.sls sql.haproxy
-  
-Install soft metier
-  apache
-  cluster
-  haproxy
-  ...
-salt $TARGET state.sls 
+salt $TARGET cmd.run 'service xinetd restart'
   
   
+  
+salt $TARGET state.sls custom.arengi.vhosts
 
 TK
 Install soft 
@@ -90,3 +85,31 @@ fail2ban : quel port pour SSH ? -> 22
 partage de session avec memcached
 Changer le nom des machines pour back
 haproxy : modifier la config à la main
+
+
+
+Déploiement du code : 
+scp -P 22 /home/minottos/Téléchargements/wetransfer-b1e136.zip root@arengi-back2.chooo7.com:/tmp/
+
+ssh root
+cd /tmp
+mkdir sources
+cp wetransfer-b1e136.zip sources/
+cd sources
+mysql -u root -pareXXXX
+source Dump20170412.sql
+
+
+mkdir code
+mv arengi-preprod.tar.gz code/
+cd code
+tar zxvf arengi-preprod.tar.gz 
+cp -a preprod.arengibox.com /var/www/
+chgrp www-data -R  /var/www/preprod.arengibox.com/
+service apache2 restart
+mkdir -p /mnt/phptmp
+chmod -R 777 /mnt/phptmp
+cd /var/www/preprod.arengibox.com/current
+sudo -u www-data php composer.phar install
+sudo -u www-data php app/console assets:install
+sudo -u www-data php app/console assetic:dump

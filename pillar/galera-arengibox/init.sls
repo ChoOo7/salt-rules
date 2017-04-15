@@ -3,3 +3,4 @@ mysql_config:
    maintenance_password: areYYYY
    client_name: areZZZZ
    haproxy_password: arePPPP
+   node_suffix: back

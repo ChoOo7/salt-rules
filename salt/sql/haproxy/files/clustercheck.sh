@@ -42,7 +42,7 @@ TIMEOUT=10
 # Perform the query to check the wsrep_local_state
 #
 
-WSREP_STATUS=`mysql -nNE --connect-timeout=$TIMEOUT --user=${MYSQL_USERNAME} "--password=${MYSQL_PASSWORD}" -e "SHOW STATUS LIKE 'wsrep_local_state';" 2>${ERR_FILE} | tail -1 2>>${ERR_FILE}`
+WSREP_STATUS=`mysql -nNE --host=127.0.0.1 --connect-timeout=$TIMEOUT --user=${MYSQL_USERNAME} "--password=${MYSQL_PASSWORD}" -e "SHOW STATUS LIKE 'wsrep_local_state';" 2>${ERR_FILE} | tail -1 2>>${ERR_FILE}`
 
 if [[ "${WSREP_STATUS}" == "4" ]] || [[ "${WSREP_STATUS}" == "2" && ${AVAILABLE_WHEN_DONOR} == 1 ]]
 then

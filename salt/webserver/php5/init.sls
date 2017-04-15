@@ -31,6 +31,8 @@ installPhpPackages:
       - php5.6-mysql
       - php5.6-gd
       - php5.6-cli
+      - php5.6-ldap
+      - php5.6-intl
       - php5.6-curl
       - php5.6-xsl
       - php5.6-json
@@ -69,12 +71,61 @@ installPhpPackagesOther:
 {% endfor %}
 
 
-{% for configName in ['gd.ini', 'json.ini', 'memcache.ini', 'mysql.ini', 'pdo_mysql.ini', 'xsl.ini', 'exif.ini', 'mysqlnd.ini', 'readline.ini', 'xml.ini', 'curl.ini', 'iconv.ini', 'opcache.ini', 'ftp.ini', 'igbinary.ini', 'mysqli.ini'] %}
+{% for configName in ['mysqlnd.ini', 'xml.ini'] %}
+
+# SIMLINK
+{{ pillar['php_config_dir'] }}apache2/conf.d/10-{{ configName }}:
+  file.symlink:
+    - target: ../../mods-available/{{ configName }}
+
+#Cli
+{{ pillar['php_config_dir'] }}cli/conf.d/10-{{ configName }}:
+  file.symlink:
+    - target: ../../mods-available/{{ configName }}
+    
+
+{{ pillar['php_config_dir'] }}apache2/conf.d/{{ configName }}:
+  file.absent:
+    - name: {{ pillar['php_config_dir'] }}apache2/conf.d/{{ configName }} 
+    
+{{ pillar['php_config_dir'] }}cli/conf.d/{{ configName }}:
+  file.absent:
+    - name: {{ pillar['php_config_dir'] }}cli/conf.d/{{ configName }} 
+    
+{{ pillar['php_config_dir'] }}apache2/conf.d/15-{{ configName }}:
+  file.absent:
+    - name: {{ pillar['php_config_dir'] }}apache2/conf.d/15-{{ configName }} 
+    
+{{ pillar['php_config_dir'] }}cli/conf.d/15-{{ configName }}:
+  file.absent:
+    - name: {{ pillar['php_config_dir'] }}cli/conf.d/15-{{ configName }} 
+    
+{% endfor %}
+
+
+
+{% for configName in ['gd.ini', 'json.ini', 'memcache.ini', 'mysql.ini', 'pdo_mysql.ini', 'xsl.ini', 'exif.ini', 'readline.ini', 'curl.ini', 'iconv.ini', 'opcache.ini', 'ftp.ini', 'igbinary.ini', 'mysqli.ini', 'ldap.ini'] %}
 
 # SIMLINK
 {{ pillar['php_config_dir'] }}apache2/conf.d/{{ configName }}:
   file.symlink:
     - target: ../../mods-available/{{ configName }}
+
+{{ pillar['php_config_dir'] }}apache2/conf.d/20-{{ configName }}:
+  file.absent:
+    - name: {{ pillar['php_config_dir'] }}apache2/conf.d/20-{{ configName }} 
+    
+{{ pillar['php_config_dir'] }}apache2/conf.d/10-{{ configName }}:
+  file.absent:
+    - name: {{ pillar['php_config_dir'] }}apache2/conf.d/10-{{ configName }} 
+
+{{ pillar['php_config_dir'] }}cli/conf.d/20-{{ configName }}:
+  file.absent:
+    - name: {{ pillar['php_config_dir'] }}cli/conf.d/20-{{ configName }} 
+
+{{ pillar['php_config_dir'] }}cli/conf.d/10-{{ configName }}:
+  file.absent:
+    - name: {{ pillar['php_config_dir'] }}cli/conf.d/10-{{ configName }} 
 
 #Cli
 {{ pillar['php_config_dir'] }}cli/conf.d/{{ configName }}:

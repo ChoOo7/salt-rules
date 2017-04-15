@@ -53,6 +53,8 @@ installPackages:
       - libterm-readkey-perl
       - libhtml-template-perl
       - iproute
+      - libaio1
+      - galera-3
       - mariadb-common
   
 {% set admin_password = pillar['mysql_config']['admin_password'] %}
@@ -146,6 +148,12 @@ copy:
     - unless: ls /etc/mysql/conf.d/galera.cnf
     - require:
       - pkg: mariadb-pkgs
+
+
+
+/etc/mysql/mariadb.conf.d/galera.cnf:
+  file.symlink:
+    - target: ../conf.d/galera.cnf
 
 {% if grains['is_node_master'] %}
 start_wsrep:

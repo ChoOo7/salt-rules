@@ -10,7 +10,7 @@ bind-address=0.0.0.0
 #galera settings
 wsrep_provider=/usr/lib/galera/libgalera_smm.so
 wsrep_cluster_name="{{ grains['base_hostname'] }}_maria_cluster"
-wsrep_cluster_address="gcomm://{{ grains['base_hostname'] }}-node1,{{ grains['base_hostname'] }}-node2,{{ grains['base_hostname'] }}-node3"
+wsrep_cluster_address="gcomm://{{ grains['base_hostname'] }}-{{ pillar['mysql_config']['node_suffix'] }}1,{{ grains['base_hostname'] }}-{{ pillar['mysql_config']['node_suffix'] }}2,{{ grains['base_hostname'] }}-{{ pillar['mysql_config']['node_suffix'] }}3"
 
 #wsrep_sst_method=rsync
 wsrep_sst_method=xtrabackup
