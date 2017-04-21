@@ -31,6 +31,7 @@ installPhpPackages:
       - php5.6-mysql
       - php5.6-gd
       - php5.6-cli
+      - php5.6-zip
       - php5.6-ldap
       - php5.6-intl
       - php5.6-curl
@@ -104,7 +105,7 @@ installPhpPackagesOther:
 
 
 
-{% for configName in ['gd.ini', 'json.ini', 'memcache.ini', 'mysql.ini', 'pdo_mysql.ini', 'xsl.ini', 'exif.ini', 'readline.ini', 'curl.ini', 'iconv.ini', 'opcache.ini', 'ftp.ini', 'igbinary.ini', 'mysqli.ini', 'ldap.ini'] %}
+{% for configName in ['gd.ini', 'json.ini', 'memcache.ini', 'mysql.ini', 'pdo_mysql.ini', 'xsl.ini', 'exif.ini', 'readline.ini', 'curl.ini', 'iconv.ini', 'opcache.ini', 'ftp.ini', 'igbinary.ini', 'mysqli.ini', 'ldap.ini', 'zip.ini'] %}
 
 # SIMLINK
 {{ pillar['php_config_dir'] }}apache2/conf.d/{{ configName }}:
