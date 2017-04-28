@@ -1,0 +1,21 @@
+{% set server = salt['grains.filter_by']({
+    'Ubuntu': {
+        'pkgs': ['glusterfs-server','bc', 'attr'],
+        'service': 'glusterfs-server',
+    },
+    'RedHat': {
+        'pkgs': ['glusterfs-server','bc'],
+        'service': 'glusterd',
+    },
+}, merge=salt['pillar.get']('glusterfs:server')) %}
+
+{% set client = salt['grains.filter_by']({
+    'Ubuntu': {
+        'pkgs': ['glusterfs-client', 'attr'],
+        'mount_defaults': 'defaults,nobootwait',
+    },
+    'RedHat': {
+        'pkgs': ['glusterfs-fuse'],
+        'mount_defaults': 'defaults',
+    },
+}, merge=salt['pillar.get']('glusterfs:client')) %}

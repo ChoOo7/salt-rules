@@ -18,3 +18,4 @@ base:
     - php56
     - galera-arengibox
     - hostname-back
+    - glusterfs-arengibox
