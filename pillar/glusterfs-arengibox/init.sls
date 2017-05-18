@@ -1,4 +1,4 @@
-
+# beware device will be formatted
 glusterfs:
   server:
     peers:
@@ -6,11 +6,21 @@ glusterfs:
     - arengi-back2
     - arengi-back3
     volumes:
-       glance:
-         storage: /data
+       data:
+         storage: /data/gluster
+         mountpoint: /data
+         device: /dev/sdb
          replica: 3
          bricks:
-         - arenggi-back1:/data
-         - arenggi-back2:/data
-         - arenggi-back3:/data
+         - arengi-back1:/data/gluster
+         - arengi-back2:/data/gluster
+         - arengi-back3:/data/gluster
+    enabled: true
+  client:
+    volumes:
+      data:
+        path: /mnt/gluster
+        server: arengi-back1
+        user: www-data
+        group: www-data
     enabled: true

@@ -1,3 +1,3 @@
 include:
-  - glusterfs.server.service
-  - glusterfs.server.setup
+  - glusterfs.server
+  - glusterfs.client

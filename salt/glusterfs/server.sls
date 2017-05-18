@@ -1,9 +1,11 @@
 
+{% from "glusterfs/map.jinja" import server with context %}
+
 glusterfs-server:
-{% if grains['os'] == 'Ubuntu' %}
-  pkgrepo.managed:
-    - ppa: ppa:semiosis/ubuntu-glusterfs-3.4
-{% endif %}
+  # {% if grains['os'] == 'Ubuntu' %}
+  #   pkgrepo.managed:
+  #     - ppa: ppa:semiosis/ubuntu-glusterfs-3.4
+  # {% endif %}
   pkg.installed: []
   service.running:
     - enable: True
@@ -14,7 +16,7 @@ glusterfs-server:
 # taken from https://github.com/salt-formulas/salt-formula-glusterfs/blob/master/glusterfs/server/setup.sls
 # taken from https://github.com/salt-formulas/salt-formula-glusterfs/blob/master/glusterfs/server/service.sls
 
-glusterf_peers:
+glusterfs_peers:
   glusterfs.peered:
     - names: {{ server.peers }}
     - require:
@@ -24,6 +26,24 @@ glusterf_peers:
 {{ volume.storage }}:
   file.directory:
     - makedirs: true
+  #  file.directory:
+  #    - makedirs: true
+
+glusterfs_format_{{name}}:
+  blockdev.formatted:
+    - name: {{volume.device}}
+
+glusterfs_mount_{{name}}:
+  mount.mounted:
+    - name: {{volume.mountpoint}}
+    - device: {{volume.device}}
+    - fstype: ext4
+    - mkmnt: True
+    - persist: True
+    - opts:
+      - defaults,relatime
+    - require:
+      - blockdev: glusterfs_format_{{name}}
 
 glusterfs_vol_{{name}}:
   glusterfs.volume_present:
@@ -31,11 +51,15 @@ glusterfs_vol_{{name}}:
     - replica: {{volume.replica }}
     - bricks: {{ volume.bricks }}
     - start: true
-    - require: glusterfs_peers
+    - require:
+      - glusterfs_format_{{name}}
+      - glusterfs_mount_{{name}}
+      - glusterfs: glusterfs_peers
 
 glusterfs_vol_start_{{name}}:
   glusterfs.started:
-    - name: {{ volume }}
+    - name: {{ name }}
     - require:
-    - glusterfs: glusterfs_vol_{{ name }}
+      - glusterfs: glusterfs_vol_{{ name }}
+
 {% endfor %}
