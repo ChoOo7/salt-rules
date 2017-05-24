@@ -1,98 +1,129 @@
-Procedure installation : 
+Procedure installation des machines : 
 
-TK
-Install ubuntu
+Etape 1 : 
+Installation des machines sur l'OS Ubuntu (Xenial)
+
+Etape 2 : 
+Mise à jour de tous les paquets
 sudo apt-get dist-upgrade
 
-Partitionement
+Etape 3 : 
+S'enregistrer auprès du salt-master
 
-TK / SM
-  S'enregistrer sur le salt-master
-  
-  Mettre en place le partionement / les disques
-  
 sudo apt-get install -Y salt-minion
 salt-key -L
 salt-key -a TheHostname
 
 
+Etape 4 : 
+Partitionement du disque
 
-
-modifier
+Etape 5 : 
+Configuration des pillars sur le salt master afin d'y placer notamment les mots de passe admin de MySQL
+Modifier le fichier 
 /srv/pillar/top.sls
 
 salt '*' 'saltutil.sync_grains'
 
 
-SM
-Install soft divers : htop, nano,....
+Etape 6 : 
+Application des regles salt pour installer les différents logiciels de la machine
+
 TARGET="arengi-back*"
+# Definition de nouveaux grains salt utilisés dans les templates
 salt '*' saltutil.sync_grains
+# Mise à jour des pillars
 salt '*' saltutil.refresh_pillar
 
+# Mise en place de la configuration reseau des machines (définition nom court dans /etc/hosts pour échanges)
 salt $TARGET state.sls custom.arengi.hosts
 
+# Installation de dépendances necessaires à l'application des regles salt suivantes
 salt $TARGET state.sls all.initialdeps
-salt $TARGET state.sls all.generalstuff
-salt $TARGET state.sls all.generalstuff
-salt $TARGET state.sls all.ulimits
-salt $TARGET cmd.run 'apt-get dist-upgrade -y'
-salt $TARGET cmd.run reboot
-salt $TARGET test.ping
-salt $TARGET cmd.run 'apt-get dist-upgrade -y'
-salt $TARGET cmd.run reboot
-salt $TARGET test.ping
-salt $TARGET state.sls webserver
-salt $TARGET state.sls webserver
-salt $TARGET state.sls webserver.memcached
-salt $TARGET state.sls webserver.memcached
-#
-oui une seconde fois ! :)
 
+# Installation de soft divers non métier (nano, htop, iotop, ...)
+salt $TARGET state.sls all.generalstuff
+
+# Appliqué deux fois, ce n'est pas une erreur, la première fois tout ne s'installe pas
+salt $TARGET state.sls all.generalstuff
+
+# Augmentation des limites de la machine (nombre de fichier ouvert surtout)
+salt $TARGET state.sls all.ulimits
+
+# On force de nouveau un upgrade de tous les packages
+salt $TARGET cmd.run 'apt-get dist-upgrade -y'
+
+# Puis on reboot la machine car ça ne fait pas de mal tant après avoir installé tant de choses.
+salt $TARGET cmd.run reboot
+
+# Attendre, puis avec un test.ping on peut detecter que la machine est de nouveau UP
+salt $TARGET test.ping
+
+# Installation de apache & php avec tout ce qui va bien
+salt $TARGET state.sls webserver
+
+# Toujours appliqué deux fois
+salt $TARGET state.sls webserver
+
+# Puis memcached pour le partage de session php entre les machines
+salt $TARGET state.sls webserver.memcached
+salt $TARGET state.sls webserver.memcached
+
+# Installation et configuration de fail2ban pour eviter les attaques des type bruteforce
 salt $TARGET state.sls fail2ban
 
-Installer les noeuds un par un en commençant par le master
+
+Etape 7 : 
+Mise en place du cluster SQl
+L'installation du cluster va se faire machine par machine à l'inverse des installations précédentes ou nous lancions tout en parrallele sur les 3 machines.
+# Installer les noeuds un par un en commençant par le master
+
+# Installation du galera cluster et configuration
+# Sur back1 cela va démarer le cluster en mode maitre
 TARGET="arengi-back1"
 salt $TARGET state.sls sql.galera
 salt $TARGET state.sls sql.galera
 
+# Sur back2, le noeud va rejoindre le cluster existant
 TARGET="arengi-back2"
 salt $TARGET state.sls sql.galera
 salt $TARGET state.sls sql.galera
 
+# Sur back3, le noeud va rejoindre le cluster existant
 TARGET="arengi-back3"
 salt $TARGET state.sls sql.galera
 salt $TARGET state.sls sql.galera
 
+
+# Les installations suivantes peuvent de nouveau être faites en parralèle sur les 3 machines
 TARGET="arengi-back*"
 
-
+# Configuration SQL
 salt $TARGET state.sls sql.conf
+
+# Mise en place des backup SQL
 salt $TARGET state.sls sql.automysqlbackup
+
+# Divers outils d'administration
 salt $TARGET state.sls sql.utils
+
+# HAProxy pour la repartition de charge / l'envoi du traffic à un noed up
 salt $TARGET state.sls sql.haproxy
+
+# xinetd pour la mise à disposition d'une sonde HTTP indiquant l'état d'un noeud
 salt $TARGET cmd.run 'service xinetd restart'
   
   
-  
+Etape 8 : 
+Installation de l'application
+
+# Mise en place des vhosts apache
 salt $TARGET state.sls custom.arengi.vhosts
 
-TK
-Install soft 
-  monitoring
-  firewall
 
 
 
-TODO : 
-fail2ban : quel port pour SSH ? -> 22
-partage de session avec memcached
-Changer le nom des machines pour back
-haproxy : modifier la config à la main
-
-
-
-Déploiement du code : 
+# Déploiement du code : (à adapter, et à faire sur tous les fronts)
 scp -P 22 /home/minottos/Téléchargements/wetransfer-b1e136.zip root@arengi-back2.chooo7.com:/tmp/
 
 ssh root
